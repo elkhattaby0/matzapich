@@ -189,3 +189,37 @@ h1,h2,h3,h4,h5,h6,p,a,span,div,input,button  {
     flex-direction: column;
     gap: 10px;
 }
+
+
+@media (max-width: 992px) {
+    .AuthLayout {
+        width: fit-content;
+        margin: 50px 0;
+    }
+
+    .AuthLayout div {
+        max-width: 90%;
+        width: 100%;
+    }
+    .AuthLayout form,
+    .AuthLayout .Redirect,
+    .AuthLayout input {
+        width: 100%;
+    }
+
+
+
+    .AuthLayout form.register select,
+    .AuthLayout form.register input,
+    .AuthLayout form.register {
+        width: 100% !important; 
+        max-width: 100% !important;
+    }
+    .AuthLayout form.register div {
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+
+    .verify-email section {
+        width: 80%;
+    }
+}

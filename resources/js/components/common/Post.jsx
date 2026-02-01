@@ -14,6 +14,8 @@ export default function Post({
   visibility,
   onDelete,
   onUpdate,
+  currentUserId,
+  postUserId,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -23,7 +25,9 @@ export default function Post({
   const [editImageFile, setEditImageFile] = useState(null);
     const [editPreview, setEditPreview] = useState(imgPost);
     const [removeImage, setRemoveImage] = useState(false);
+  const isOwner = currentUserId != null && postUserId != null && Number(currentUserId) === Number(postUserId);
 
+  
   const visibilityIcon = (() => {
     switch (visibility) {
       case 'public':
@@ -72,28 +76,40 @@ export default function Post({
       setRemoveImage(false);
     };
 
+
+
   return (
     <BgCard tag="postinfo">
       <div className="content">
-        <img src={userimg} alt={name} className="userimg" />
+        
         <section>
-          <div className="top">
-            <div>
-              <p>{name}</p>
-              <p>
-                <span>{date} {time}</span>
-                <span> • </span>
-                <i className={visibilityIcon}></i>
-              </p>
+          <div className="head">
+            <img src={userimg} alt={name} className="userimg" />
+            <div className="top">
+              <div className="headRight">
+                <div>
+                  <p>{name}</p>
+                  <p>
+                    <span>{date} {time}</span>
+                    <span> • </span>
+                    <i className={visibilityIcon}></i>
+                  </p>
+                </div>
+                {isOwner && (
+                  <button
+                    type="button"
+                    onClick={() => setIsMenuOpen(prev => !prev)}
+                  >
+                    {isMenuOpen ? (
+                      <i className="fa-solid fa-xmark"></i>
+                    ) : (
+                      <i className="fa-solid fa-ellipsis"></i>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(prev => !prev)}
-            >
-              <i className="fa-solid fa-ellipsis"></i>
-            </button>
           </div>
-
           <div className="middle">
             {isEditing ? (
               <div className="isEditing">

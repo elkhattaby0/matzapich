@@ -85,6 +85,8 @@ export default function MainContent() {
           imgPost={p.media_url ? p.media_url : null}
           onUpdate={handleUpdatePost}
           onDelete={handleDeletePost}
+          currentUserId={user?.id}
+          postUserId={p.user_id}
         />
       ))}
     </div>

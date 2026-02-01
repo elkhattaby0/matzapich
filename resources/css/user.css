@@ -376,6 +376,20 @@ header img {
     min-height: fit-content;
     position: relative;
 }
+.postinfo .head {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.postinfo .headRight {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.postinfo .headRight div {
+    flex-direction: column;
+}
 .postinfo .content {
     display: flex;
     width: 100%;
@@ -386,13 +400,14 @@ header img {
     height: 40px;
     width: 40px;
     object-fit: cover;
+    aspect-ratio: 1/1;
 }
 .postinfo .content section {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    
+    padding: 5px 15px
 }
 .postinfo .content section .top {
     display: flex;
@@ -400,11 +415,12 @@ header img {
     justify-content: space-between;
     align-items: start;
     gap: 4px;
+    width: 100%;
 }
 .postinfo .content section .top div i,
 .postinfo .content section .top div {
     display: flex;
-    flex-direction: column;
+    align-items: start;
     gap: 2px;
 }
 .postinfo .content section .top div p:last-child {
@@ -432,16 +448,15 @@ header img {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    width: 95%;
+    width: 100%;
 }
 .postinfo .content section .middle p {
     font-size: 15px;
 }
 .postinfo .content section .middle img {
     object-fit: contain;
-    height: auto;
+    height: 100%;
     width: 100%;
-    aspect-ratio: 1/1;
     border-radius: 5px;
     background: var(--hover);
 }
@@ -449,7 +464,7 @@ header img {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 95%;
+    width: 100%;
     gap: 15px;
 }
 .postinfo .content section .bottom button {
@@ -487,7 +502,7 @@ header img {
     gap: 8px;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.12);
     position: absolute;
-    top: 30px;
+    top: 40px;
     right: 13px;
     border-top-right-radius:0;
 }
@@ -926,4 +941,41 @@ header img {
 .createPost .top .topRight .audienceMenu li:hover,
 .createPost .top .topRight .audienceMenu li.active {
     background: var(--hover);
+}
+
+
+
+
+
+
+@media (max-width: 992px) {
+    header nav {
+        width: 90%;
+    }
+    header .searchField,
+    header section:nth-child(2) {
+        display: none;
+    }
+
+    .Profile .content {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 20px;
+    }
+    .sidebar {
+        width: calc(100% - 60px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .Profile .MainContent {
+        width: 90%;
+    }
+
+    .side section {
+        height: 100svh;
+        /*width: 100svw;*/
+    }
 }
