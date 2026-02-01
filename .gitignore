@@ -1,0 +1,29 @@
+# Laravel
+/vendor
+/public/storage
+/storage/*.key
+.env
+.env.*
+.phpunit.result.cache
+
+# Node / Vite
+/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+vite.config.ts.timestamp*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Logs & cache
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/framework/*
+!/storage/framework/.gitignore
