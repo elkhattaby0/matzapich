@@ -1,0 +1,65 @@
+import './bootstrap'
+import '../css/app.css';  
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
+import VerifyEmail  from './pages/auth/VerifyEmail';
+import Home from './pages/Home';
+import UserLayout from './pages/layouts/UserLayout';
+import ProtectedRoute from './components/common/ProtectedRoute'
+import GuestRoute from './components/common/GuestRoute'
+import { useAuth } from './hooks/useAuth';
+
+function RootRedirect() {
+    const { isAuthenticated, loading } = useAuth();
+    
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    
+    return <Navigate to={isAuthenticated ? "/user" : "/login"} replace />;
+}
+function App() {
+
+    return (
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<RootRedirect />} />
+                    <Route path="/login" element={
+                        <GuestRoute>
+                            <Login />
+                        </GuestRoute>
+                    } />
+                    <Route path="/register" element={
+                        <GuestRoute>
+                            <Register />
+                        </GuestRoute>
+                    } />
+
+                    <Route path="/verify-email" element={
+                        <GuestRoute>
+                            <VerifyEmail />
+                        </GuestRoute>
+                    } />
+
+                    
+                    <Route
+                        path="/user"
+                        element={
+                            <ProtectedRoute>
+                                <UserLayout />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    );
+}
+
+const root = createRoot(document.getElementById('app'));
+root.render(<App />);
