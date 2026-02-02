@@ -70,12 +70,6 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        \Log::info('DEBUG Update', [
-            'user_id' => auth()->id(),
-            'post_user_id' => $post->user_id,
-            'user' => auth()->user(),
-            'auth_check' => auth()->check()
-        ]);
         $this->authorize('update', $post);
 
         $validated = $request->validate([
@@ -115,12 +109,6 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        \Log::info('DEBUG Update', [
-            'user_id' => auth()->id(),
-            'post_user_id' => $post->user_id,
-            'user' => auth()->user(),
-            'auth_check' => auth()->check()
-        ]);
         if ($post->user_id !== auth()->id()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
