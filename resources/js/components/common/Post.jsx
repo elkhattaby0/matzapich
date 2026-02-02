@@ -1,7 +1,8 @@
 import BgCard from './BgCard';
 import ShowMoreText from './ShowMoreText';
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { fileToWebpBlob } from '../../components/PostImages';
+import detectDirection from '../../components/common/detectDirection'
 
 
 
@@ -29,8 +30,18 @@ export default function Post({
     const [editPreview, setEditPreview] = useState(imgPost);
     const [removeImage, setRemoveImage] = useState(false);
   const isOwner = currentUserId != null && postUserId != null && Number(currentUserId) === Number(postUserId);
-
+const textareaRef = useRef(null);
   
+  const handleEditContentChange = (e) => {
+    const value = e.target.value;
+    setEditContent(value);
+
+    const ta = textareaRef.current;
+    if (ta) {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    }
+  };
   const visibilityIcon = (() => {
     switch (visibility) {
       case 'public':
@@ -125,9 +136,9 @@ export default function Post({
                   <option value="only_me">Only me</option>
                 </select>
 
-                <textarea
-                  value={editContent}
-                  onChange={e => setEditContent(e.target.value)}
+                <textarea dir={detectDirection(editContent)}
+                  value={editContent} ref={textareaRef}
+                  onChange={handleEditContentChange}
                 />
                 
 
@@ -138,7 +149,7 @@ export default function Post({
 
                   <div className="editImageActions">
                     <label style={{ cursor: 'pointer' }}>
-                      <i className="fa-solid fa-image" /> Change image
+                      <i className="fa-solid fa-arrow-up-from-bracket"></i> Change image
                       <input
                         type="file"
                         accept="image/*"
@@ -156,7 +167,7 @@ export default function Post({
                           setEditPreview(null);
                         }}
                       >
-                        Remove image
+                        <i className="fa-solid fa-trash"></i>
                       </button>
                     )}
                   </div>
