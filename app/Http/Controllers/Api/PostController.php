@@ -109,6 +109,13 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        \Log::info('DELETE DEBUG', [
+        'post_id' => $post->id,
+        'post_user_id' => $post->user_id,
+        'auth_user_id' => auth()->id(),
+        'auth_user' => auth()->user()?->only('id', 'name'),
+        'auth_check' => auth()->check()
+    ]);
         if ($post->user_id !== auth()->id()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
