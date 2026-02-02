@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import detectDirection from '../../components/common/detectDirection'
+
 
 export default function ShowMoreText({ text, lines = 2 }) {
   const [expanded, setExpanded] = useState(false);
@@ -18,7 +20,7 @@ export default function ShowMoreText({ text, lines = 2 }) {
 
   return (
     <div>
-      <p
+      <p dir={detectDirection(text)}
         ref={textRef}
         className={`text ${expanded ? "expanded" : "clamped"}`}
         style={{

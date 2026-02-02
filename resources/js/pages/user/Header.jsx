@@ -40,6 +40,7 @@ export default function Header ({onOpenSide}){
                             src={avatarUrl}
                             alt={`${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'User'}
                         />
+                        <i className="fa-solid fa-chevron-down"></i>
                     </button>
                 </section>
             </nav>

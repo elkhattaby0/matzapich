@@ -1,8 +1,9 @@
 import BgCard from '../../components/common/BgCard';
 import { useAuth } from '../../hooks/useAuth';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { fileToWebpBlob } from '../../components/PostImages';
 import { createPost } from '../../utils/api';
+import detectDirection from '../../components/common/detectDirection'
 
 const AUDIENCES = [
   { value: 'public', label: 'Public', icon: 'fa-solid fa-earth-africa' },
@@ -18,6 +19,7 @@ export default function CreatePost({ onPostCreated }) {
   const [rawImage, setRawImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
+  const textareaRef = useRef(null);
 
   const APP_URL = import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000';
 
@@ -31,6 +33,14 @@ export default function CreatePost({ onPostCreated }) {
   const currentAudience =
     AUDIENCES.find((a) => a.value === audience) ?? AUDIENCES[0];
 
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+
+    // Auto-resize textarea
+    const ta = textareaRef.current;
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  };
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -115,9 +125,11 @@ export default function CreatePost({ onPostCreated }) {
 
         <div className="middle">
           <textarea
+            dir={detectDirection(content)}
+            ref={textareaRef}
             placeholder={`What's on your mind, ${user.firstName}?`}
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={handleContentChange}
           />
 
           {previewUrl && (
