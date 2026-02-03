@@ -70,6 +70,20 @@ export const userApi = {
         return response.data;
     }
 };
+export async function updateProfile(fields) {
+  const formData = new FormData();
+
+  Object.entries(fields).forEach(([key, value]) => {
+    if (value === undefined || value === null) return;
+    formData.append(key, value);
+  });
+
+  const res = await axios.post('/api/user?_method=PUT', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+  return res.data; // { message, user }
+}
 
 // Admin API
 export const adminApi = {
@@ -89,7 +103,6 @@ export const adminApi = {
     }
 };
 
-// User Post
 // User Post
 export async function createPost(payload, onUploadProgress) {
   let formData;
@@ -119,7 +132,7 @@ export async function createPost(payload, onUploadProgress) {
 
 
 export async function getPosts(page = 1) {
-  const res = await axios.get('/api/posts?page=${page}');
+  const res = await axios.get(`/api/posts?page=${page}`);
   return res.data;
 }
 

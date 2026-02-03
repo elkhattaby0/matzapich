@@ -52,7 +52,8 @@ class UserController extends Controller
             'work'          => 'sometimes|nullable|string|max:255',
             'studied'       => 'sometimes|nullable|string|max:255',
             'phone'         => 'sometimes|nullable|string|max:20',
-            'avatar'        => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'avatar' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'cover'  => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
         ];
 
         $passwordRules = [];
@@ -79,13 +80,44 @@ class UserController extends Controller
             $user->password = Hash::make($request->newPassword);
         }
 
+
+        // handle cover file (convert to webp)
+        if ($request->hasFile('cover')) {
+            if ($user->cover_path && Storage::disk('public')->exists($user->cover_path)) {
+                Storage::disk('public')->delete($user->cover_path);
+            }
+
+            $file = $request->file('cover');
+
+            // Read original image into GD
+            $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
+            if ($image) {
+                // generate .webp filename
+                $filename = uniqid('cover_', true) . '.webp';
+                $path = 'covers/' . $filename;
+
+                Storage::disk('public')->makeDirectory('covers');
+                $full = Storage::disk('public')->path($path);
+
+                // compress to webp (quality 0–100, e.g. 80)
+                imagewebp($image, $full, 80);
+                imagedestroy($image);
+
+                // save relative path in DB
+                $user->cover_path = $path;
+            }
+        }
+
+        unset($validated['cover']);
+
+
         // handle avatar file
         if ($request->hasFile('avatar')) {
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
 
-            $path = $request->file('avatar')->store('avatars', 'public'); // e.g. "avatars/xxx.webp"
+            $path = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $path;
         }
 
