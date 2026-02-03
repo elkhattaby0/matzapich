@@ -83,6 +83,7 @@ export default function MainContent() {
           })}
           post={p.content}
           imgPost={p.media_url ? p.media_url : null}
+          videoUrl={p.video_url}
           onUpdate={handleUpdatePost}
           onDelete={handleDeletePost}
           currentUserId={user?.id}

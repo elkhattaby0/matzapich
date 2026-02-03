@@ -1,9 +1,11 @@
+import { useState, useRef, useCallback } from 'react';
 import BgCard from '../../components/common/BgCard';
 import { useAuth } from '../../hooks/useAuth';
-import { useState, useRef } from 'react';
 import { fileToWebpBlob } from '../../components/PostImages';
+import detectDirection from '../../components/common/detectDirection';
 import { createPost } from '../../utils/api';
-import detectDirection from '../../components/common/detectDirection'
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
 const AUDIENCES = [
   { value: 'public', label: 'Public', icon: 'fa-solid fa-earth-africa' },
@@ -17,8 +19,11 @@ export default function CreatePost({ onPostCreated }) {
   const [openAudience, setOpenAudience] = useState(false);
   const [content, setContent] = useState('');
   const [rawImage, setRawImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [rawVideo, setRawVideo] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [previewVideo, setPreviewVideo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [compressing, setCompressing] = useState(false);
   const textareaRef = useRef(null);
 
   const APP_URL = import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000';
@@ -36,41 +41,98 @@ export default function CreatePost({ onPostCreated }) {
   const handleContentChange = (e) => {
     setContent(e.target.value);
 
-    // Auto-resize textarea
     const ta = textareaRef.current;
+    if (!ta) return;
     ta.style.height = 'auto';
     ta.style.height = ta.scrollHeight + 'px';
   };
-  const handleFileChange = (e) => {
+
+  const handleImageChange = (e) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file || !file.type.startsWith('image/')) return;
+
     setRawImage(file);
-    setPreviewUrl(URL.createObjectURL(file));
+    setPreviewImage(URL.createObjectURL(file));
+  };
+
+  const compressVideo = useCallback(async (file) => {
+    setCompressing(true);
+    try {
+      const ffmpeg = new FFmpeg();
+      const baseURL = await toBlobURL('/ffmpeg/', import.meta.url);
+
+      await ffmpeg.load({
+        coreURL: await toBlobURL(`${baseURL}ffmpeg-core.js`, import.meta.url),
+        wasmURL: await toBlobURL(`${baseURL}ffmpeg-core.wasm`, import.meta.url),
+      });
+
+      const outputName = `compressed_${Date.now()}.mp4`;
+      await ffmpeg.writeFile('input.mp4', await fetchFile(file));
+
+      await ffmpeg.exec([
+        '-i', 'input.mp4',
+        '-vcodec', 'libx264',
+        '-crf', '28',
+        '-preset', 'medium',
+        '-vf', 'scale=1280:720:force_original_aspect_ratio=decrease',
+        '-c:a', 'aac',
+        '-b:a', '96k',
+        '-movflags', '+faststart',
+        outputName,
+      ]);
+
+      const data = await ffmpeg.readFile(outputName);
+      return new File([data], outputName, { type: 'video/mp4' });
+    } finally {
+      setCompressing(false);
+    }
+  }, []);
+
+  const handleVideoChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith('video/')) return;
+
+    setRawVideo(file);
+    setPreviewVideo(URL.createObjectURL(file));
+
+    // Compress only if larger than 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      const compressed = await compressVideo(file);
+      setRawVideo(compressed);
+    }
   };
 
   const handlePost = async () => {
-    if (!content.trim() && !rawImage) return;
+    if (!content.trim() && !rawImage && !rawVideo) return;
 
     try {
       setLoading(true);
-      let webpBlob = null;
-      if (rawImage) {
-        webpBlob = await fileToWebpBlob(rawImage, 0.7);
+
+      const formData = new FormData();
+      formData.append('visibility', audience);
+      if (content.trim()) {
+        formData.append('content', content.trim());
       }
 
-      const imageForUpload = webpBlob
-        ? new File([webpBlob], 'post.webp', { type: 'image/webp' })
-        : null;
+      if (rawImage) {
+        const webpBlob = await fileToWebpBlob(rawImage, 0.7);
+        const imageFile = new File([webpBlob], 'post.webp', {
+          type: 'image/webp',
+        });
+        formData.append('image', imageFile);
+      }
 
-      const newPost = await createPost({
-        content: content.trim(),
-        visibility: audience,
-        imageFile: imageForUpload,
-      });
-      
+      if (rawVideo) {
+        formData.append('video', rawVideo);
+      }
+
+      const newPost = await createPost(formData);
+
       setContent('');
       setRawImage(null);
-      setPreviewUrl(null);
+      setRawVideo(null);
+      setPreviewImage(null);
+      setPreviewVideo(null);
 
       if (onPostCreated) onPostCreated(newPost);
     } finally {
@@ -132,9 +194,19 @@ export default function CreatePost({ onPostCreated }) {
             onChange={handleContentChange}
           />
 
-          {previewUrl && (
+          {previewImage && (
             <div className="preview">
-              <img src={previewUrl} alt="Preview" />
+              <img src={previewImage} alt="Preview" />
+            </div>
+          )}
+
+          {previewVideo && (
+            <div className="preview">
+              <video
+                src={previewVideo}
+                controls
+                className="max-w-xs rounded"
+              />
             </div>
           )}
 
@@ -150,16 +222,28 @@ export default function CreatePost({ onPostCreated }) {
                   type="file"
                   accept="image/*"
                   style={{ display: 'none' }}
-                  onChange={handleFileChange}
+                  onChange={handleImageChange}
                 />
               </label>
             </li>
             <li>
-              <i
-                className="fa-solid fa-video"
-                style={{ color: '#f02849' }}
-              ></i>
-              Video
+              <label style={{ cursor: 'pointer' }}>
+                <i
+                  className="fa-solid fa-video"
+                  style={{ color: '#f02849' }}
+                ></i>
+                Video
+                <input
+                  type="file"
+                  accept="video/*"
+                  style={{ display: 'none' }}
+                  onChange={handleVideoChange}
+                  disabled={compressing}
+                />
+              </label>
+              {compressing && (
+                <span style={{ marginLeft: 8 }}>Compressing...</span>
+              )}
             </li>
             <li>
               <i
@@ -181,7 +265,11 @@ export default function CreatePost({ onPostCreated }) {
         <div className="bottom">
           <button
             type="button"
-            disabled={loading || (!content.trim() && !rawImage)}
+            disabled={
+              loading ||
+              compressing ||
+              (!content.trim() && !rawImage && !rawVideo)
+            }
             onClick={handlePost}
           >
             {loading ? 'Posting...' : 'Post'}

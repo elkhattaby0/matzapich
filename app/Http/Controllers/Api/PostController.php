@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CompressPostVideo;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -28,21 +29,29 @@ class PostController extends Controller
             'content'    => ['nullable', 'string', 'max:2000'],
             'visibility' => ['required', 'in:public,friends,only_me'],
             'image'      => ['nullable', 'image', 'max:4096'], // 4MB
+            'video' => 'nullable|file|mimes:mp4,mov|max:51200',
         ]);
 
         $mediaPath = null;
+        $videoPath = null;
 
         if ($request->hasFile('image')) {
             $mediaPath = $this->storeWebpImage($request->file('image'));
+        }
+        if ($request->hasFile('video')) {
+            $videoPath = $request->file('video')->store('posts/temp', 'public');
         }
 
         $post = Post::create([
             'user_id'    => $user->id,
             'content'    => $validated['content'] ?? null,
             'media_path' => $mediaPath,
+            'video_path' => $videoPath,
             'visibility' => $validated['visibility'],
         ]);
-
+        if ($videoPath) {
+            CompressPostVideo::dispatch($post);
+        }
         return response()->json($post->load('user'), 201);
     }
 
@@ -109,13 +118,6 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        \Log::info('DELETE DEBUG', [
-        'post_id' => $post->id,
-        'post_user_id' => $post->user_id,
-        'auth_user_id' => auth()->id(),
-        'auth_user' => auth()->user()?->only('id', 'name'),
-        'auth_check' => auth()->check()
-    ]);
         if ($post->user_id !== auth()->id()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }

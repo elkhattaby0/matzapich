@@ -13,6 +13,7 @@ class Post extends Model
         'content',
         'media_path',
         'visibility',
+        'video_path',
     ];
 
     public function user()
@@ -21,13 +22,18 @@ class Post extends Model
     }
 
     // app/Models/Post.php
-    protected $appends = ['media_url'];
-
+    protected $appends = ['media_url', 'video_url'];
+    
     public function getMediaUrlAttribute()
     {
         return $this->media_path
             ? asset('storage/'.$this->media_path)
             : null;
+    }
+
+    public function getVideoUrlAttribute()
+    {
+        return $this->video_path ? asset('storage/' . $this->video_path) : null;
     }
 
 }

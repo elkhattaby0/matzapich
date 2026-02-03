@@ -15,6 +15,7 @@ export default function Post({
   time,
   post,
   imgPost,
+  videoUrl,
   visibility,
   onDelete,
   onUpdate,
@@ -177,6 +178,15 @@ const textareaRef = useRef(null);
               <div className="postTextWrapper">
                 <ShowMoreText lines={2} text={post} />
                 {imgPost && <img src={imgPost} alt="Post media" />}
+                  {videoUrl && (
+                  <video
+                    src={videoUrl}
+                    controls
+                    className="postVideo"
+                    preload="metadata"
+                    style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '8px' }}
+                  />
+                )}
               </div>
             )}
 

@@ -90,16 +90,24 @@ export const adminApi = {
 };
 
 // User Post
-export async function createPost({ content, visibility, imageFile }) {
-  const formData = new FormData();
-  formData.append('visibility', visibility);
-  if (content) formData.append('content', content);
-  if (imageFile) formData.append('image', imageFile);
+export async function createPost(payload) {
+  let formData;
+
+  if (payload instanceof FormData) {
+    formData = payload;
+  } else {
+    const { content, visibility, imageFile, videoFile } = payload;
+    formData = new FormData();
+    formData.append('visibility', visibility);
+    if (content) formData.append('content', content);
+    if (imageFile) formData.append('image', imageFile);
+    if (videoFile) formData.append('video', videoFile);
+  }
 
   const res = await axios.post('/api/posts', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
-  
+
   return res.data.post ?? res.data;
 }
 
@@ -107,15 +115,18 @@ export async function getPosts() {
   const res = await axios.get('/api/posts');
   return res.data;
 }
+
 export async function updatePost(
   id,
-  { content, visibility, imageFile, removeImage = false }
+  { content, visibility, imageFile, removeImage = false, videoFile, removeVideo = false }
 ) {
   const formData = new FormData();
   if (visibility) formData.append('visibility', visibility);
   if (content !== undefined) formData.append('content', content);
   if (removeImage) formData.append('remove_image', '1');
   if (imageFile) formData.append('image', imageFile);
+  if (videoFile) formData.append('video', videoFile);
+  if (removeVideo) formData.append('remove_video', '1');
 
   const res = await axios.post(`/api/posts/${id}?_method=PUT`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },

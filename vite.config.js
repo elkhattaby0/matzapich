@@ -10,6 +10,10 @@ export default defineConfig({
         }),
         react(),
     ],
+    assetsInclude: ['**/*.wasm'],          // ← ADD for ffmpeg wasm
+    optimizeDeps: {
+        exclude: ['@ffmpeg/ffmpeg'],      // ← ADD so ffmpeg loads correctly
+    },
     server: {
         host: '127.0.0.1',
         port: 5173,
