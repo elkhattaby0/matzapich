@@ -1,46 +1,55 @@
-import Post from '../../components/common/Post';
 import { useEffect, useState } from 'react';
+import Post from '../../components/common/Post';
 import { useAuth } from '../../hooks/useAuth';
-import CreatePost from './CreatePost'
+import CreatePost from './CreatePost';
 import { getPosts, updatePost, deletePost } from '../../utils/api';
-
 
 export default function MainContent() {
   const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const APP_URL = import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000'; 
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const APP_URL = import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000';
 
   if (!user) return null;
 
   const currentAvatarUrl = user.avatar
     ? `${APP_URL}/storage/${user.avatar}`
-    : `${APP_URL}/storage/avatars/noavatar.png`; 
+    : `${APP_URL}/storage/avatars/noavatar.png`;
+
+  const loadPosts = async (pageToLoad = 1) => {
+    if (pageToLoad === 1) setLoading(true);
+    else setLoadingMore(true);
+
+    try {
+      const data = await getPosts(pageToLoad); // GET /api/posts?page=n
+
+      // Laravel paginate(): { data: [...], current_page, last_page, ... }
+      const items = Array.isArray(data.data) ? data.data : data;
+
+      setPosts(prev =>
+        pageToLoad === 1 ? items : [...prev, ...items]
+      );
+
+      if (data.current_page && data.last_page) {
+        setPage(data.current_page);
+        setHasMore(data.current_page < data.last_page);
+      } else {
+        setHasMore(false);
+      }
+    } finally {
+      if (pageToLoad === 1) setLoading(false);
+      else setLoadingMore(false);
+    }
+  };
 
   useEffect(() => {
-    let isMounted = true;
-
-    async function fetchPosts() {
-      try {
-        const data = await getPosts(); // implements GET /api/posts
-        if (!isMounted) return;
-
-        // data.data if you use Laravel pagination
-        const items = Array.isArray(data.data) ? data.data : data;
-        setPosts(items);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    }
-
-    fetchPosts();
-
-    return () => {
-      isMounted = false;
-    };
+    loadPosts(1);
   }, []);
-
 
   const handleUpdatePost = async (id, payload) => {
     const updated = await updatePost(id, payload);
@@ -48,9 +57,10 @@ export default function MainContent() {
       prev.map(p => (p.id === id ? updated : p))
     );
   };
+
   const handleDeletePost = async (id) => {
     await deletePost(id);
-    setPosts((prev) => prev.filter((p) => p.id !== id));
+    setPosts(prev => prev.filter(p => p.id !== id));
   };
 
   return (
@@ -58,7 +68,7 @@ export default function MainContent() {
       <CreatePost
         onPostCreated={(newPost) => {
           // optimistic prepend
-          setPosts((prev) => [newPost, ...prev]);
+          setPosts(prev => [newPost, ...prev]);
         }}
       />
 
@@ -90,6 +100,17 @@ export default function MainContent() {
           postUserId={p.user_id}
         />
       ))}
+
+      {!loading && hasMore && (
+        <button
+          type="button"
+          onClick={() => loadPosts(page + 1)}
+          disabled={loadingMore}
+          className="showMore"
+        >
+          {loadingMore ? 'Loading...' : 'Show more'}
+        </button>
+      )}
     </div>
   );
 }

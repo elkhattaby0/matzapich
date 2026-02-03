@@ -118,8 +118,8 @@ export async function createPost(payload, onUploadProgress) {
 }
 
 
-export async function getPosts() {
-  const res = await axios.get('/api/posts');
+export async function getPosts(page = 1) {
+  const res = await axios.get('/api/posts?page=${page}');
   return res.data;
 }
 
