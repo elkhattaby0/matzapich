@@ -17,6 +17,7 @@
         "@ffmpeg/util": "^0.12.2",
         "browser-image-compression": "^2.0.2",
         "react": "^19.2.3",
+        "react-circular-progressbar": "^2.2.0",
         "react-dom": "^19.2.3",
         "react-router-dom": "^6.30.3"
     }

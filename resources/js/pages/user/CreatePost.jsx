@@ -6,6 +6,8 @@ import detectDirection from '../../components/common/detectDirection';
 import { createPost } from '../../utils/api';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 const AUDIENCES = [
   { value: 'public', label: 'Public', icon: 'fa-solid fa-earth-africa' },
@@ -25,6 +27,8 @@ export default function CreatePost({ onPostCreated }) {
   const [loading, setLoading] = useState(false);
   const [compressing, setCompressing] = useState(false);
   const textareaRef = useRef(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
 
   const APP_URL = import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000';
 
@@ -59,14 +63,19 @@ export default function CreatePost({ onPostCreated }) {
     setCompressing(true);
     try {
       const ffmpeg = new FFmpeg();
-      const baseURL = await toBlobURL('/ffmpeg/', import.meta.url);
+      const baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.10/dist/esm';
 
       await ffmpeg.load({
-        coreURL: await toBlobURL(`${baseURL}ffmpeg-core.js`, import.meta.url),
-        wasmURL: await toBlobURL(`${baseURL}ffmpeg-core.wasm`, import.meta.url),
+        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+        workerURL: await toBlobURL(
+          `${baseURL}/ffmpeg-core.worker.js`,
+          'text/javascript'
+        ),
       });
 
       const outputName = `compressed_${Date.now()}.mp4`;
+
       await ffmpeg.writeFile('input.mp4', await fetchFile(file));
 
       await ffmpeg.exec([
@@ -88,6 +97,7 @@ export default function CreatePost({ onPostCreated }) {
     }
   }, []);
 
+
   const handleVideoChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith('video/')) return;
@@ -107,9 +117,10 @@ export default function CreatePost({ onPostCreated }) {
 
     try {
       setLoading(true);
+      setUploadProgress(0);
 
       const formData = new FormData();
-      formData.append('visibility', audience);
+      formData.append('visibility', audience); // 'public' | 'friends' | 'only_me'
       if (content.trim()) {
         formData.append('content', content.trim());
       }
@@ -126,19 +137,31 @@ export default function CreatePost({ onPostCreated }) {
         formData.append('video', rawVideo);
       }
 
-      const newPost = await createPost(formData);
+      const newPost = await createPost(formData, (percent) => {
+        setUploadProgress(percent);
+      });
 
       setContent('');
       setRawImage(null);
       setRawVideo(null);
       setPreviewImage(null);
       setPreviewVideo(null);
+      setUploadProgress(0);
 
       if (onPostCreated) onPostCreated(newPost);
+    } catch (error) {
+      if (error.response) {
+        console.log('422 data:', error.response.data);
+        alert(JSON.stringify(error.response.data.errors || error.response.data, null, 2));
+      } else {
+        console.error(error);
+      }
     } finally {
       setLoading(false);
     }
   };
+
+
 
   return (
     <BgCard tag="createPost">
@@ -262,7 +285,7 @@ export default function CreatePost({ onPostCreated }) {
           </ul>
         </div>
 
-        <div className="bottom">
+        <div className="bottom" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
             type="button"
             disabled={
@@ -272,9 +295,25 @@ export default function CreatePost({ onPostCreated }) {
             }
             onClick={handlePost}
           >
-            {loading ? 'Posting...' : 'Post'}
+            {loading ? 'Uploading...' : 'Post'}
           </button>
+
+          {loading && (
+            <div style={{ width: 40, height: 40 }}>
+              <CircularProgressbar
+                value={uploadProgress}
+                text={`${uploadProgress}%`}
+                styles={buildStyles({
+                  textSize: '26px',
+                  pathColor: '#1877f2',
+                  textColor: '#1877f2',
+                  trailColor: '#eee',
+                })}
+              />
+            </div>
+          )}
         </div>
+
       </div>
     </BgCard>
   );

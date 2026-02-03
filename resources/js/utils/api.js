@@ -90,7 +90,8 @@ export const adminApi = {
 };
 
 // User Post
-export async function createPost(payload) {
+// User Post
+export async function createPost(payload, onUploadProgress) {
   let formData;
 
   if (payload instanceof FormData) {
@@ -106,10 +107,16 @@ export async function createPost(payload) {
 
   const res = await axios.post('/api/posts', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
+    onUploadProgress: (event) => {
+      if (!onUploadProgress || !event.total) return;
+      const percent = Math.round((event.loaded * 100) / event.total);
+      onUploadProgress(percent);
+    },
   });
 
   return res.data.post ?? res.data;
 }
+
 
 export async function getPosts() {
   const res = await axios.get('/api/posts');

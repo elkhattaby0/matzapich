@@ -182,6 +182,7 @@ const textareaRef = useRef(null);
                   <video
                     src={videoUrl}
                     controls
+                    controlsList="nodownload"
                     className="postVideo"
                     preload="metadata"
                     style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '8px' }}
