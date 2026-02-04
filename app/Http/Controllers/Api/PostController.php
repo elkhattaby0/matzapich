@@ -13,7 +13,16 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->user();
+
         $posts = Post::with('user')
+            ->where(function ($q) use ($user) {
+                $q->where('visibility', 'public');
+
+                if ($user) {
+                    $q->orWhere('user_id', $user->id);
+                }
+            })
             ->latest()
             ->paginate(10);
 

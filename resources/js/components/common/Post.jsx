@@ -4,7 +4,7 @@ import { useState,useRef } from 'react';
 import { fileToWebpBlob } from '../../components/PostImages';
 import detectDirection from '../../components/common/detectDirection'
 import PostVideoPlayer from "./PostVideoPlayer";
-
+import PostImage from "./PostImage";
 
 
 export default function Post({
@@ -177,9 +177,11 @@ const textareaRef = useRef(null);
             ) : (
               <div className="postTextWrapper">
                 <ShowMoreText lines={2} text={post} />
-                {imgPost && <img src={imgPost} alt="Post media" />}
-                  {videoUrl && (
-                    <PostVideoPlayer src={videoUrl} />
+
+                {imgPost && <PostImage src={imgPost} />}
+
+                {videoUrl && (
+                  <PostVideoPlayer src={videoUrl} />
                 )}
               </div>
             )}
