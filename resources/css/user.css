@@ -531,7 +531,6 @@ header button i.fa-chevron-down {
     height: auto;
     max-height: 350px;
     width: 100%;
-    border-radius: 5px;
     background: var(--hover);
 }
 .postinfo .content section .bottom {
