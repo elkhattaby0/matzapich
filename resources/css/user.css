@@ -1069,3 +1069,35 @@ header button i.fa-chevron-down {
         /*width: 100svw;*/
     }
 }
+
+
+
+
+
+
+
+
+
+/* global styles (e.g. src/index.css) */
+
+.logo-matzapich {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 0;
+  letter-spacing: -0.05em;
+  color: var(--black);
+  text-decoration: none;
+}
+
+.wordmark-z {
+  display: inline-block;
+  transform: translateY(-1px) rotate(-5deg);
+  color: var(--blue);
+  font-size: 40px;
+}
+
+.logo-high-x-height {
+  font-feature-settings: "salt" on, "ss01" on;
+}
