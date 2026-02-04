@@ -11,8 +11,7 @@ export default function PostImage({ src, alt = "Post media", className }) {
     <div
       className="postImageWrapper"
       style={{
-        marginTop: 8,
-        borderRadius: 8,
+        borderRadius: 0,
         overflow: "hidden",
         backgroundColor: "#000", // black bg for letterbox
         maxHeight: 600,
