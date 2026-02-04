@@ -421,11 +421,13 @@ header button i.fa-chevron-down {
 .postinfo {
     min-height: fit-content;
     position: relative;
+    padding: 10px 0;
 }
 .postinfo .head {
     display: flex;
     align-items: center;
     gap: 15px;
+    width: 95%;
 }
 .postinfo .headRight {
     width: 100%;
@@ -453,7 +455,8 @@ header button i.fa-chevron-down {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    padding: 5px 15px
+    padding: 5px 0;
+    align-items: center;
 }
 .postinfo .content section .top {
     display: flex;
@@ -535,7 +538,7 @@ header button i.fa-chevron-down {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 95%;
     gap: 15px;
 }
 .postinfo .content section .bottom button {
@@ -560,6 +563,10 @@ header button i.fa-chevron-down {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+.postTextWrapper div:first-child {
+    width: calc(100% - 6%);
+    padding: 0px 3%;
 }
 .postinfo .postpopup {
     background: var(--white);

@@ -65,7 +65,7 @@ export default function PostVideoPlayer({ src, className }) {
         position: "relative",
         maxWidth: "100%",
         marginTop: 8,
-        borderRadius: 8,
+        borderRadius: 0,
         overflow: "hidden",
         backgroundColor: "#000", // black background
         aspectRatio: "16 / 9",   // consistent player height
