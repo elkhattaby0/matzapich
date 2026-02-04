@@ -3,7 +3,7 @@ import ShowMoreText from './ShowMoreText';
 import { useState,useRef } from 'react';
 import { fileToWebpBlob } from '../../components/PostImages';
 import detectDirection from '../../components/common/detectDirection'
-
+import PostVideoPlayer from "./PostVideoPlayer";
 
 
 
@@ -179,14 +179,7 @@ const textareaRef = useRef(null);
                 <ShowMoreText lines={2} text={post} />
                 {imgPost && <img src={imgPost} alt="Post media" />}
                   {videoUrl && (
-                  <video
-                    src={videoUrl}
-                    controls
-                    controlsList="nodownload"
-                    className="postVideo"
-                    preload="metadata"
-                    style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '8px' }}
-                  />
+                    <PostVideoPlayer src={videoUrl} />
                 )}
               </div>
             )}
