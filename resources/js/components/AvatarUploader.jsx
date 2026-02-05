@@ -18,7 +18,7 @@ const AvatarUploader = ({ onImageCompressed, currentAvatar }) => {
       height: '150px',
       borderRadius: '50%',
       overflow: 'hidden',
-      border: '3px solid #3498db',
+      border: '3px solid #0000FFB4',
       cursor: 'pointer',
     },
     avatarImage: {
@@ -43,7 +43,7 @@ const AvatarUploader = ({ onImageCompressed, currentAvatar }) => {
       transition: 'opacity 0.3s',
     },
     uploadBtn: {
-      backgroundColor: '#3498db',
+      backgroundColor: '#0000FFB4',
       color: 'white',
       padding: '10px 20px',
       border: 'none',
@@ -65,7 +65,7 @@ const AvatarUploader = ({ onImageCompressed, currentAvatar }) => {
     },
     loading: {
       textAlign: 'center',
-      color: '#3498db',
+      color: '#0000FFB4',
       fontSize: '14px',
       fontWeight: 'bold',
     },
