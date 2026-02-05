@@ -7,8 +7,6 @@ import Footer from '../../components/layout/Footer';
 import Profile from '../user/Profile';
 import Side from '../user/Side';
 import Settings from '../user/Settings';
-import AvatarUploader from '../../components/AvatarUploader';
-import axios from 'axios';
 
 export default function UserLayout() {
   const [sideOpen, setSideOpen] = useState(false);

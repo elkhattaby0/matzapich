@@ -7,7 +7,7 @@
 }
 
 header {
-    box-shadow: 0px 0px 5px #0000004f;
+    box-shadow: 0px 0px 1px #0000004f;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -382,7 +382,7 @@ header button i.fa-chevron-down {
     background: var(--white);
     border-radius: 14px;
     padding: 10px;
-    box-shadow: 0px 0px 2.5px #0000004f;
+    box-shadow: 0px 0px 1px #0000004f;
 }
 
 
@@ -1106,4 +1106,13 @@ header button i.fa-chevron-down {
 
 .logo-high-x-height {
   font-feature-settings: "salt" on, "ss01" on;
+}
+
+
+
+
+
+/*pageFriends*/
+.pageFriends {
+    width: 1340px;
 }

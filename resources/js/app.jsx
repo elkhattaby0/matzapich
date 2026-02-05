@@ -9,6 +9,7 @@ import Login from './pages/auth/Login';
 import VerifyEmail  from './pages/auth/VerifyEmail';
 import Home from './pages/Home';
 import UserLayout from './pages/layouts/UserLayout';
+import Friends from './pages/user/Friends';
 import ProtectedRoute from './components/common/ProtectedRoute'
 import GuestRoute from './components/common/GuestRoute'
 import { useAuth } from './hooks/useAuth';
@@ -46,12 +47,21 @@ function App() {
                         </GuestRoute>
                     } />
 
-                    
+                    {/*ProtectedRoute*/}
                     <Route
                         path="/user"
                         element={
                             <ProtectedRoute>
                                 <UserLayout />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route 
+                        path="/friends"
+                        element={
+                            <ProtectedRoute>
+                                <Friends />
                             </ProtectedRoute>
                         }
                     />
