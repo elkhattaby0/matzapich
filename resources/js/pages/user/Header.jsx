@@ -26,8 +26,8 @@ export default function Header ({onOpenSide}){
                 </section>
 
                 <section>
-                    <a><i className="fa-regular fa-house"></i></a>
-                    <a><i className="fa-solid fa-people-group"></i></a>
+                    <a href="/"><i className="fa-regular fa-house"></i></a>
+                    <a href="/friends"><i className="fa-solid fa-people-group"></i></a>
                     <a><i className="fa-regular fa-comment-dots"></i></a>
                     <a><i className="fa-regular fa-bell"></i></a>
                 </section>
