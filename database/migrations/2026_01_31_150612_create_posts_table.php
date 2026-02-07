@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
-              ->constrained('users') 
-              ->cascadeOnDelete();
+                ->constrained('users') 
+                ->cascadeOnDelete();
             $table->text('content')->nullable();
             $table->string('media_path')->nullable(); 
             $table->enum('visibility', ['public', 'friends', 'only_me'])->default('public');
