@@ -56,7 +56,12 @@ class FriendshipController extends Controller
     public function accept(Request $request, Friendship $friendship)
     {
         $user = $request->user();
-
+        logger()->info('Accept friendship debug', [
+            'auth_id'      => $user->id,
+            'friendship_id'=> $friendship->id,
+            'requester_id' => $friendship->requester_id,
+            'addressee_id' => $friendship->addressee_id,
+        ]);
         if ($friendship->addressee_id !== $user->id) {
             return response()->json(['error' => 'Not allowed'], 403);
         }
