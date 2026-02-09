@@ -70,6 +70,7 @@ export default function Header({ onOpenSide }) {
           <NavLink
             to="/user"
             className={({ isActive }) => (isActive ? 'active' : '')}
+            end 
           >
             <i className="fa-solid fa-house"></i>
           </NavLink>

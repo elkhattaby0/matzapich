@@ -87,6 +87,7 @@ export default function UserLayout() {
         <NavLink
             to="/user"
             className={({ isActive }) => (isActive ? 'active' : '')}
+            end 
           >
             <i className="fa-solid fa-house"></i>
           </NavLink>
