@@ -1383,6 +1383,7 @@ header button i.fa-chevron-down {
         flex-direction: column;
         width: 100%;
         gap: 15px;
+        padding: 0 0 15px 0;
     }
     .profile-page .Profile .sidebar {
         width: 100%;
