@@ -19,7 +19,7 @@ class FriendshipController extends Controller
         $user = $request->user();
         $addresseeId = (int) $request->addressee_id;
 
-        if ($addresseeId === $user->id) {
+        if ($addresseeId === (int) $user->id) {
             return response()->json([
                 'error' => 'You cannot add yourself as a friend.',
             ], 422);
@@ -56,13 +56,8 @@ class FriendshipController extends Controller
     public function accept(Request $request, Friendship $friendship)
     {
         $user = $request->user();
-        logger()->info('Accept friendship debug', [
-            'auth_id'      => $user->id,
-            'friendship_id'=> $friendship->id,
-            'requester_id' => $friendship->requester_id,
-            'addressee_id' => $friendship->addressee_id,
-        ]);
-        if ($friendship->addressee_id !== $user->id) {
+
+        if ((int) $friendship->addressee_id !== (int) $user->id) {
             return response()->json(['error' => 'Not allowed'], 403);
         }
 
@@ -75,7 +70,7 @@ class FriendshipController extends Controller
     {
         $user = $request->user();
 
-        if ($friendship->addressee_id !== $user->id) {
+        if ((int) $friendship->addressee_id !== (int) $user->id) {
             return response()->json(['error' => 'Not allowed'], 403);
         }
 
@@ -88,7 +83,10 @@ class FriendshipController extends Controller
     {
         $user = $request->user();
 
-        if ($friendship->requester_id !== $user->id && $friendship->addressee_id !== $user->id) {
+        if (
+            (int) $friendship->requester_id !== (int) $user->id
+            && (int) $friendship->addressee_id !== (int) $user->id
+        ) {
             return response()->json(['error' => 'Not allowed'], 403);
         }
 
@@ -109,7 +107,9 @@ class FriendshipController extends Controller
             ->get();
 
         $friendIds = $friendships->map(function (Friendship $f) use ($user) {
-            return $f->requester_id === $user->id ? $f->addressee_id : $f->requester_id;
+            return (int) $f->requester_id === (int) $user->id
+                ? (int) $f->addressee_id
+                : (int) $f->requester_id;
         })->values();
 
         $friends = User::whereIn('id', $friendIds)->get();
@@ -166,17 +166,18 @@ class FriendshipController extends Controller
             })
             ->get()
             ->map(function (Friendship $f) use ($user) {
-                return $f->requester_id === $user->id ? $f->addressee_id : $f->requester_id;
+                return (int) $f->requester_id === (int) $user->id
+                    ? (int) $f->addressee_id
+                    : (int) $f->requester_id;
             })
             ->values()
             ->all();
 
         $excludeIds = array_unique(array_merge(
-            [$user->id],
+            [(int) $user->id],
             $friendsIds,
             $pendingIds
         ));
-
 
         $candidates = User::whereNotIn('id', $excludeIds)
             ->limit(20)
@@ -214,11 +215,11 @@ class FriendshipController extends Controller
 
         $result = $friends->map(function (User $friend) {
             return [
-                'id'         => $friend->id,
-                'firstName'  => $friend->firstName,
-                'lastName'   => $friend->lastName,
-                'avatar'     => $friend->avatar,
-                'birthdate'  => $friend->birthdate,
+                'id'        => $friend->id,
+                'firstName' => $friend->firstName,
+                'lastName'  => $friend->lastName,
+                'avatar'    => $friend->avatar,
+                'birthdate' => $friend->birthdate,
             ];
         })->values();
 
@@ -237,13 +238,15 @@ class FriendshipController extends Controller
             ->get();
 
         return $friendships->map(function (Friendship $f) use ($user) {
-            return $f->requester_id === $user->id ? $f->addressee_id : $f->requester_id;
+            return (int) $f->requester_id === (int) $user->id
+                ? (int) $f->addressee_id
+                : (int) $f->requester_id;
         })->values()->all();
     }
 
     protected function getMutualFriendsCount(User $user, User $other): int
     {
-        $userFriends = $this->getFriendsIds($user);
+        $userFriends  = $this->getFriendsIds($user);
         $otherFriends = $this->getFriendsIds($other);
 
         return count(array_intersect($userFriends, $otherFriends));
