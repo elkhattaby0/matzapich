@@ -43,17 +43,17 @@ h1,h2,h3,h4,h5,h6,p,a,span,div,input,button  {
 .Input {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 6px;
 }
 .Input label {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     color: var(--black);
 }
 .Input input {
     border-radius: 5px;
     height: 30px;
-    border: 1px solid var(--black);
+    border: 1px solid gray;
     font-size: 16px;
     font-weight: 400;
     padding: 5px 20px;
@@ -69,17 +69,17 @@ h1,h2,h3,h4,h5,h6,p,a,span,div,input,button  {
 .Select {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 6px;
 }
 .Select label {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     color: var(--black);
 }
 .Select select {
     border-radius: 5px;
     height: 42px;
-    border: 1px solid var(--black);
+    border: 1px solid gray;
     font-size: 16px;
     font-weight: 400;
     padding: 5px 20px;
@@ -118,8 +118,8 @@ h1,h2,h3,h4,h5,h6,p,a,span,div,input,button  {
     border-radius: 5px;
     height: 43px;
     padding: 5px 20px;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     background-color: var(--blue);
     color: var(--white);
     width: 100%;
@@ -136,13 +136,17 @@ h1,h2,h3,h4,h5,h6,p,a,span,div,input,button  {
     flex-direction: column;
     gap: 50px;
     min-height: 100svh;
+    width: 100%;
+    height: 100%;
+    background: var(--hover);
+    padding-top: 50px;
 }
 .AuthLayout form {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 428px;
-    background: var(--hover);
+    background: var(--white);
     padding: 30px;
     border-radius: 14px;
     box-shadow: 0px 0px 1px #0000004f;
@@ -151,22 +155,43 @@ h1,h2,h3,h4,h5,h6,p,a,span,div,input,button  {
     width: fit-content;
 }
 
-/* ================================ */
-/* FirstHeading */
-/* ================================ */
-.FirstHeading {
-    font-size: 40px;
-    font-weight: 600;
-    text-align: center;
-    width: 428px;
+.AuthLayout .top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.AuthLayout .top h2 {
+    font-size: 30px;
+    font-weight: 800;
+}
+.AuthLayout .top p {
+    font-size: 16px;
+    color: gray;
 }
 
-
-
+.AuthLayout .link {
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+.AuthLayout .link a{
+    color: var(--blue);
+    text-decoration: unset;
+    font-weight: 600;
+}
+.AuthLayout .Forgotpassword {
+    color: var(--blue);
+    font-size: 15px;
+    width: fit-content;
+}
 
 /*verify-email*/
 .verify-email {
-    border: 1px solid red;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -192,35 +217,79 @@ h1,h2,h3,h4,h5,h6,p,a,span,div,input,button  {
 }
 
 
-@media (max-width: 992px) {
-    .AuthLayout {
-        width: fit-content;
-        margin: 50px 0;
+
+
+
+
+/* LOGO */
+.logo-matzapich {
+  --logo-size: 30px;           /* default, can be overridden from inline style */
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-weight: 800;
+  font-size: var(--logo-size);
+  line-height: 0;
+  letter-spacing: -0.05em;
+  color: var(--black);
+  text-decoration: none;
+}
+
+.wordmark-z {
+  display: inline-block;
+  transform: translateY(-1px) rotate(-5deg);
+  color: var(--blue);
+  font-size: calc(var(--logo-size) + 10px);
+}
+
+.logo-high-x-height {
+  font-feature-settings: "salt" on, "ss01" on;
+  display: flex;
+  align-items: baseline;
+}
+
+
+
+
+
+
+
+
+
+/*FOOTER*/
+footer {
+  border-top: 1px solid #e5e7eb;
+  background-color: var(--white);
+  padding: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 12px;
+  color: #6b7280;
+  width: 100%;
+  margin: 0;
+}
+
+
+
+
+@media (max-width: 480px) {
+    .AuthLayout form {
+        width: calc(100% - 50px);
+        border-radius: 0;
     }
-
-    .AuthLayout div {
-        max-width: 90%;
-        width: 100%;
-    }
-    .AuthLayout form,
-    .AuthLayout .Redirect,
-    .AuthLayout input {
-        width: 100%;
-    }
-
-
-
-    .AuthLayout form.register select,
-    .AuthLayout form.register input,
     .AuthLayout form.register {
-        width: 100% !important; 
-        max-width: 100% !important;
+        width: calc(100% - 50px);
     }
     .AuthLayout form.register div {
         grid-template-columns: repeat(1, 1fr) !important;
     }
 
+    .verify-email {
+        width: 100%;
+    }
     .verify-email section {
-        width: 80%;
+        width: calc(100% - 50px);
+        border-radius: 0;
     }
 }

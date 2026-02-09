@@ -1,13 +1,12 @@
-import FirstHeading from "../../components/common/FirstHeading";
+import Logo from '../../components/common/Logo';
+import Footer from '../../components/layout/Footer';
 
-export default function AuthLayout({children, title}) {
-
-    return (
-        <div className="AuthLayout">
-            <FirstHeading>{title}</FirstHeading>
-            <div>
-                {children}
-            </div>
-        </div>
-    )
+export default function AuthLayout({ children }) {
+  return (
+      <div className="AuthLayout">
+        <Logo size={40} />
+        {children}
+        <Footer />
+      </div>
+  );
 }

@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet, NavLink } from 'react-router-dom';
 
 import Header from '../user/Header';
 import Footer from '../../components/layout/Footer';
-import Profile from '../user/Profile';
 import Side from '../user/Side';
-import Settings from '../user/Settings';
 
 export default function UserLayout() {
   const [sideOpen, setSideOpen] = useState(false);
@@ -31,34 +29,50 @@ export default function UserLayout() {
     setSideTitle(title);
     setSideContent(contentKey);
     setSideOpen(true);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeSide = () => {
     setSideOpen(false);
-    document.body.style.overflow = '';
   };
 
   const UserMenu = () => (
     <ul className="usermenu">
-      <li><i className="fa-solid fa-user"></i> View your profile</li>
+      <li
+        onClick={() => {
+          navigate('/');
+          closeSide();
+        }}
+      >
+        <i className="fa-solid fa-user"></i> View your profile
+      </li>
+
       <li><i className="fa-solid fa-heart"></i> Invite friends</li>
+
       <li><i className="fa-solid fa-bookmark"></i> Bookmarks</li>
-      <li onClick={() => openSide('Settings', 'settings')}>
+
+      <li
+        onClick={() => {
+          navigate('/user/settings');
+          closeSide();
+        }}
+      >
         <i className="fa-solid fa-gear"></i> Settings
       </li>
-      <li onClick={handleLogout}>
+
+      <li
+        onClick={async () => {
+          await handleLogout();
+          closeSide();
+        }}
+      >
         <i className="fa-solid fa-arrow-right-from-bracket"></i> Log out
       </li>
     </ul>
   );
 
-  
 
   const renderSideContent = () => {
     switch (sideContent) {
-      case 'settings':
-        return <Settings onClose={closeSide} />;
       case 'menu':
       default:
         return <UserMenu />;
@@ -68,10 +82,41 @@ export default function UserLayout() {
   return (
     <>
       <Header onOpenSide={openSide} />
-      <Profile />
+
+      <nav style={{ display: 'none'}} className="mobileNavBtm">
+        <NavLink
+            to="/user"
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
+            <i className="fa-solid fa-house"></i>
+          </NavLink>
+
+          <NavLink
+            to="/user/friends"
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
+            <div className="nav-icon-with-badge">
+              <i className="fa-solid fa-user-group"></i>
+              {/*{badgeValue && (
+                <span className="badge">{badgeValue}</span>
+              )}*/}
+            </div>
+          </NavLink>
+
+          <NavLink to="/">
+            <i className="fa-solid fa-comment-dots"></i>
+          </NavLink>
+
+          <NavLink to="/">
+            <i className="fa-solid fa-bell"></i>
+          </NavLink>
+      </nav>
+
       <Side title={sideTitle} isOpen={sideOpen} onClose={closeSide}>
         {renderSideContent()}
       </Side>
+
+      <Outlet />
       <Footer />
     </>
   );

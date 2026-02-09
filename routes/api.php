@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\FriendshipController;
 use App\Models\User;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -50,4 +51,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/posts', [PostController::class, 'index']);
     Route::put('/posts/{post}', [PostController::class, 'update']);
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+
+    Route::get('/friends', [FriendshipController::class, 'index']);
+    Route::post('/friendships', [FriendshipController::class, 'store']);
+    Route::post('/friendships/{friendship}/accept', [FriendshipController::class, 'accept']);
+    Route::post('/friendships/{friendship}/reject', [FriendshipController::class, 'reject']);
+    Route::delete('/friendships/{friendship}', [FriendshipController::class, 'destroy']);
+Route::get('/friend-requests', [FriendshipController::class, 'requests']);
+Route::get('/friend-suggestions', [FriendshipController::class, 'suggestions']);
+Route::get('/friend-birthdays', [FriendshipController::class, 'birthdays']);
 });

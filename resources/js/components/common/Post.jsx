@@ -205,13 +205,19 @@ const textareaRef = useRef(null);
             ) : (
               <>
                 <button>
-                  <i className="fa-regular fa-heart"></i> Like
+                  <i className="fa-regular fa-heart"></i> <span>Like</span>
                 </button>
                 <button>
-                  <i className="fa-regular fa-comment"></i> Comment
+                  <i className="fa-regular fa-comment"></i> <span>Comment</span>
                 </button>
                 <button>
-                  <i className="fa-regular fa-share-from-square"></i> Share
+                  <i className="fa-solid fa-retweet"></i> <span>Repost</span>
+                </button>
+                <button>
+                  <i className="fa-regular fa-bookmark"></i> <span>Save</span>
+                </button>
+                <button>
+                  <i className="fa-solid fa-share-nodes"></i> <span>Share</span>
                 </button>
               </>
             )}

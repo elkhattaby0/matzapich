@@ -1,14 +1,15 @@
 import Card from './Card';
 
-export default function AllFriendContent({ data }) {
+export default function BirthdaysContent({ data }) {
   return (
     <div className="Content">
       <div>
-        <h2>Your Friends { data.length > 0 && `(${data.length})`}</h2>
+        <h2>Upcoming Birthdays</h2>
+        <p>See which friends are celebrating soon</p>
       </div>
 
       {data.length === 0 ? (
-        <p>You don't have any friends yet. Start connecting with people you know.</p>
+        <p>No upcoming birthdays. We’ll show your friends’ birthdays here.</p>
       ) : (
         <div className="FriendRequests">
           {data.map((n) => (
@@ -17,8 +18,8 @@ export default function AllFriendContent({ data }) {
               id={n.id}
               img={n.avatar || ''}
               name={`${n.firstName} ${n.lastName}`}
-              nbrFriends={n.mutual_count ?? 0}
-              tab={1}
+              nbrFriends={0}
+              tab={4} 
             />
           ))}
         </div>

@@ -33,17 +33,57 @@ header section {
     gap: 20px;
 }
 
+header section a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black);
+  text-decoration: none;
+}
+span.badge {
+  background: #e41e3f;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 6px;
+  font-size: 10px;
+  line-height: 16px;
+  min-width: 0px;
+  text-align: center;
+  font-weight: 600;
+  margin-left: 5px;
+}
+.nav-icon-with-badge .badge {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  background: #e41e3f;
+  color: #fff;
+  border-radius: 999px;
+  padding: 0 6px;
+  font-size: 10px;
+  line-height: 16px;
+  min-width: 0px;
+  text-align: center;
+  font-weight: 600;
+}
+header section a.active {
+  background: var(--hover);
+  border-radius: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 header i {
     font-size: 19px;
 }
 header a {
     padding: 8px;
 }
-header a:hover {
-    background: var(--hover);
-    border-radius: 14px;
-    cursor: pointer;
-}
+
 
 header .searchField {
     display: flex;
@@ -54,7 +94,7 @@ header .searchField {
     gap: 12px;
     border: 2px solid transparent;
 }
-header .searchField:focus-within{
+header .searchField:focus-within {
     border-color: var(--blue);
 }
 header .searchField input {
@@ -62,20 +102,6 @@ header .searchField input {
     font-size: 14px;
 }
 
-header .logo {
-    color: var(--blue);
-    /*border-bottom-right-radius: 14px;*/
-    /*padding: 8px ;*/
-    /*color: var(--white);*/
-    font-size: 25px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-}
-header .logo:hover {
-    background-color: var(--blue);
-    border-radius: 0;
-    border-bottom-right-radius: 14px;
-}
 
 header button {
     border: none;
@@ -1043,38 +1069,6 @@ header button i.fa-chevron-down {
 
 
 
-@media (max-width: 992px) {
-    header nav {
-        width: 90%;
-    }
-    header .searchField,
-    header section:nth-child(2) {
-        display: none;
-    }
-
-    .Profile .content {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        gap: 20px;
-    }
-    .sidebar {
-        width: calc(100% - 60px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-    }
-
-    .Profile .MainContent {
-        width: 90%;
-    }
-
-    .side section {
-        height: 100svh;
-        /*width: 100svw;*/
-    }
-}
 
 
 
@@ -1084,29 +1078,6 @@ header button i.fa-chevron-down {
 
 
 
-/* global styles (e.g. src/index.css) */
-
-.logo-matzapich {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  font-weight: 800;
-  font-size: 30px;
-  line-height: 0;
-  letter-spacing: -0.05em;
-  color: var(--black);
-  text-decoration: none;
-}
-
-.wordmark-z {
-  display: inline-block;
-  transform: translateY(-1px) rotate(-5deg);
-  color: var(--blue);
-  font-size: 40px;
-}
-
-.logo-high-x-height {
-  font-feature-settings: "salt" on, "ss01" on;
-}
 
 
 
@@ -1149,11 +1120,17 @@ header button i.fa-chevron-down {
     padding: 10px 15px;
     margin: 0 15px;
     cursor: pointer;
+    position: relative;
 }
 .pageFriends .panelFriends li.active {
     background: var(--hover);
 }
-
+..pageFriends .panelFriends li .panel-item-with-badge {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: blue;
+}
 
 .pageFriends .Content {
     width: 75%;
@@ -1204,13 +1181,298 @@ header button i.fa-chevron-down {
     background: var(--hover);
     color: var(--black);
 }
-.cardusers div.txt p:first-child {
-    font-size: 16px;
+.cardusers div.txt p.name {
+    font-size: 14px;
     font-size: 500;
     color: var(--black);
 }
-.cardusers div.txt p:last-child {
+.cardusers div.txt p.nbrFriends {
     font-size: 12px;
     font-weight: 400;
     color: grey;
+}
+
+
+
+/* Settings page */
+.settingsPage {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--hover);
+  padding: 30px 0;
+}
+
+/* Form container */
+.settingsForm {
+    width: 100%;
+    max-width: 992px;
+    min-width: 0;        
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 24px 24px 20px;
+}
+
+/* Sections */
+.settingsSection {
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.settingsSection:last-of-type {
+  border-bottom: none;
+  margin-bottom: 16px;
+}
+
+/* Section titles */
+.settingsSectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 10px;
+}
+
+/* Grid for two columns (first/last name) */
+.settingsGrid {
+  display: grid;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.settingsGrid--twoCols {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Single field wrapper */
+.settingsField {
+  margin-bottom: 15px;
+}
+
+/* Label */
+.settingsLabel {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* Inputs */
+.settingsInput,
+.settingsSelect,
+.settingsTextarea {
+  width: 100%;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.settingsInput:focus,
+.settingsSelect:focus,
+.settingsTextarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+}
+
+/* Disabled input (email) */
+.settingsInput--disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Textarea */
+.settingsTextarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Saving text */
+.settingsSaving {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Actions (buttons) */
+.settingsActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Buttons */
+.settingsButton {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+/* Secondary (Cancel) */
+.settingsButton--secondary {
+  background: #ffffff;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.settingsButton--secondary:hover {
+  background: #f9fafb;
+}
+
+/* Primary (Save) */
+.settingsButton--primary {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.settingsButton--primary:hover {
+  background: #1d4ed8;
+}
+
+/* Disabled primary button state */
+.settingsButton--primary:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* Loading message */
+.settings-loading {
+  padding: 24px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+
+
+
+
+@media (max-width: 480px) {
+    a.logo-matzapich.logo-high-x-height {
+        margin-left: -5px;
+    }
+    header .searchField,
+    header section:nth-child(2) {
+        display: none;
+    }
+    header nav {
+        width: calc(100% - 20px);
+    }
+    .profile-page .Profile {
+        min-height: 100%;
+    }
+    .profile-page .Profile .content {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+    .profile-page .Profile .sidebar {
+        width: 100%;
+        position: unset;
+        gap: 5px;
+    }
+    .profile-page .Profile .sidebar .BgCard {
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .profile-page .Profile .sidebar .BgCard.intro {
+        padding: 20px;
+        width: calc(100% - 40px);
+    }
+
+    .sidebar .bgCover::before,
+    .sidebar .bgCover {
+        border-radius: 0;
+    }
+    .profile-page .Profile .MainContent {
+        width: 100%;
+        gap: 5px;
+    }
+
+    .profile-page .Profile .MainContent .createPost {
+        border-radius: 0;
+        width: calc(100% - 20px);
+    }
+    .profile-page .Profile .MainContent .postinfo {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .postinfo .content section .bottom button span {
+        display: none;
+    }
+
+    nav.mobileNavBtm {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 90;
+        background: var(--white);
+        width: 100%;
+        height: 50px;
+        border-top:2px solid var(--hover);
+        box-shadow: 0px 0px 1px #0000004f;
+    }   
+    nav.mobileNavBtm a {
+        width: calc(100% / 4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--black);
+        font-size: 20px;
+        text-decoration: none;
+        height: 100%;
+    }
+    nav.mobileNavBtm a.active {
+        color: var(--blue);
+        background: var(--hover);
+        border-radius: 14px;
+
+    }
+
+    .settingsPage {
+        padding: 10px 0;
+    }
+
+    .pageFriends {
+        min-height: 100%;
+    }
+    .pageFriends section {
+        flex-direction: column;
+    }
+    .pageFriends .panelFriends {
+        width: 99%;
+        padding: 15px 0;
+        border-radius: 0;
+        position: unset;
+    }
+    .pageFriends .panelFriends li {
+        width: calc(100% - 60px);
+    }
+    .pageFriends .Content {
+        width: calc(100% - 40px);
+        padding: 0 20px;
+    }
 }

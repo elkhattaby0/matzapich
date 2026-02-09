@@ -157,3 +157,50 @@ export async function updatePost(
 export async function deletePost(id) {
   await axios.delete(`/api/posts/${id}`);
 }
+
+
+// Friendship API
+export const friendshipApi = {
+  async getFriends() {
+    const res = await axios.get('/api/friends');
+    return res.data;
+  },
+
+  async getFriendRequests() {
+    const res = await axios.get('/api/friend-requests');
+    return res.data;
+  },
+
+  async getSuggestions() {
+    const res = await axios.get('/api/friend-suggestions');
+    return res.data;
+  },
+
+  async getBirthdays() {
+    const res = await axios.get('/api/friend-birthdays');
+    return res.data;
+  },
+
+  async sendRequest(addresseeId) {
+    const res = await axios.post('/api/friendships', {
+      addressee_id: addresseeId,
+    });
+    return res.data;
+  },
+
+  async accept(friendshipId) {
+    const res = await axios.post(`/api/friendships/${friendshipId}/accept`);
+    return res.data;
+  },
+
+  async reject(friendshipId) {
+    const res = await axios.post(`/api/friendships/${friendshipId}/reject`);
+    return res.data;
+  },
+
+  async remove(friendshipId) {
+    const res = await axios.delete(`/api/friendships/${friendshipId}`);
+    return res.data;
+  },
+};
+

@@ -4,8 +4,7 @@ import Input from "../../components/common/Input";
 import Button from "../../components/common/Button";
 import Grid from "../../components/common/Grid";
 import Select from "../../components/common/Select";
-import Redirect from "../../components/common/Redirect";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function Register() {
@@ -75,6 +74,11 @@ export default function Register() {
     return (
         <AuthLayout title="Create Account">
             <form onSubmit={handleSubmit} className="register">
+                <div className="top">
+                    <h2>Create your account</h2>
+                    <p>Join to us</p>                    
+                </div>
+
                 {error && (
                     <div className="error-message" style={{
                         padding: '12px',
@@ -173,8 +177,12 @@ export default function Register() {
                 > 
                     {loading ? 'Registering...' : 'Register'}
                 </Button>
+
+                <p className="link">
+                    Already have an account?
+                    <NavLink  to="/login">Log in</NavLink>
+                </p>
             </form>
-            <Redirect path='/login'>Already have an account?</Redirect>
         </AuthLayout>
     );
 }

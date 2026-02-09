@@ -10,6 +10,8 @@ import VerifyEmail  from './pages/auth/VerifyEmail';
 import Home from './pages/Home';
 import UserLayout from './pages/layouts/UserLayout';
 import Friends from './pages/user/Friends';
+import Profile from './pages/user/Profile';
+import Settings from './pages/user/Settings';
 import ProtectedRoute from './components/common/ProtectedRoute'
 import GuestRoute from './components/common/GuestRoute'
 import { useAuth } from './hooks/useAuth';
@@ -55,16 +57,11 @@ function App() {
                                 <UserLayout />
                             </ProtectedRoute>
                         }
-                    />
-
-                    <Route 
-                        path="/friends"
-                        element={
-                            <ProtectedRoute>
-                                <Friends />
-                            </ProtectedRoute>
-                        }
-                    />
+                    >
+                        <Route index element={<Profile />} />
+                        <Route path="friends" element={<Friends />} />
+                        <Route path="settings" element={<Settings />} />
+                    </Route>
                 </Routes>
             </BrowserRouter>
         </AuthProvider>

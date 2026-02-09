@@ -2,9 +2,7 @@ import { useState } from "react";
 import AuthLayout from "../layouts/AuthLayout";
 import Input from "../../components/common/Input";
 import Button from "../../components/common/Button";
-import Redirect from "../../components/common/Redirect";
-
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../hooks/useAuth";
 
 export default function Login() {
@@ -74,8 +72,12 @@ export default function Login() {
     };
 
     return (
-        <AuthLayout title="Welcome back">
+        <AuthLayout>
             <form onSubmit={handleSubmit}>
+                <div className="top">
+                    <h2>Login</h2>
+                    <p>Welcome back</p>
+                </div>
                 {error && (
                     <div
                         className="error-message"
@@ -102,21 +104,25 @@ export default function Login() {
                 />
                 <Input
                     label="Passowrd"
-                    placeholder="****"
+                    placeholder=""
                     type="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                 />
-
+                <NavLink className="Forgotpassword" to="/register">Forgot password?</NavLink>
                 <Button
                     type="submit"
                     disabled={loading || !formData.email || !formData.password}
                 >
                     {loading ? 'Logging in...' : 'Login'}
                 </Button>
+
+                <p className="link">
+                    Don't have an account?
+                    <NavLink  to="/register">Sign up</NavLink>
+                </p>
             </form>
-            <Redirect path="/register">Sign up for Matzapich</Redirect>
         </AuthLayout>
     );
 }
