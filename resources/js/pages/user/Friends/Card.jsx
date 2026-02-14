@@ -11,6 +11,7 @@ export default function Card({
   onDeleteRequest,
   onAddFriend,
   onRemoveSuggestion,
+  onMessage,
 }) {
   const [loadingAction, setLoadingAction] = useState(null); 
   const APP_URL = import.meta.env.VITE_APP_URL || 'http://127.0.0.1:8000';
@@ -41,6 +42,17 @@ export default function Card({
 
       {(() => {
         switch (tab) {
+          case 1:
+            return (
+              <div className="btns">
+                <button
+                  disabled={loadingAction !== null}
+                  onClick={() => handleClick('message', onMessage)}
+                >
+                  {loadingAction === 'message' ? 'Opening...' : 'Message'}
+                </button>
+              </div>
+            );
           case 2:
             return (
               <div className="btns">

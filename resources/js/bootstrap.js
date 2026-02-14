@@ -6,6 +6,8 @@
 
 import axios from 'axios';
 window.axios = axios;
+// Initialize Echo/Reverb early so the websocket connects
+import './utils/echo';
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.withCredentials = true;

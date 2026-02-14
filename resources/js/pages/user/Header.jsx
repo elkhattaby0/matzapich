@@ -87,7 +87,7 @@ export default function Header({ onOpenSide }) {
             </div>
           </NavLink>
 
-          <NavLink to="/">
+          <NavLink to="/user/chat">
             <i className="fa-solid fa-comment-dots"></i>
           </NavLink>
 

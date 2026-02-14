@@ -15,6 +15,7 @@ import Settings from './pages/user/Settings';
 import ProtectedRoute from './components/common/ProtectedRoute'
 import GuestRoute from './components/common/GuestRoute'
 import { useAuth } from './hooks/useAuth';
+import ChatPage from './pages/chat/ChatPage.jsx';
 
 function RootRedirect() {
     const { isAuthenticated, loading } = useAuth();
@@ -61,6 +62,8 @@ function App() {
                         <Route index element={<Profile />} />
                         <Route path="friends" element={<Friends />} />
                         <Route path="settings" element={<Settings />} />
+                        <Route path="chat" element={<ChatPage />} />
+                        <Route path="chat/:conversationId" element={<ChatPage />} />  
                     </Route>
                 </Routes>
             </BrowserRouter>

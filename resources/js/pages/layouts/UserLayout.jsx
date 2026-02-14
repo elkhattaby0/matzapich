@@ -104,7 +104,10 @@ export default function UserLayout() {
             </div>
           </NavLink>
 
-          <NavLink to="/">
+          <NavLink
+            to="/user/chat"
+            className={({ isActive }) => (isActive ? 'active' : '')}
+          >
             <i className="fa-solid fa-comment-dots"></i>
           </NavLink>
 

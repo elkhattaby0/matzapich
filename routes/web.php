@@ -27,6 +27,14 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) 
     return redirect($frontendUrl . '/login?verified=1');
 })->name('verification.verify');
 
+/**
+ * حل Route [login] not defined
+ * نخلي أي redirect للـ login يروح لنفس welcome (اللي يحمل React/Vite)
+ */
+Route::get('/login', function () {
+    return view('welcome');
+})->name('login');
+
 Route::get('/{any}', function () {
     return view('welcome');
 })->where('any', '.*');

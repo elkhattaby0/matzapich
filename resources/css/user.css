@@ -1139,6 +1139,206 @@ header button i.fa-chevron-down {
     flex-direction: column;
     gap: 20px;
 }
+
+/* Chat page (match Friends layout) */
+.pageChat section {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+}
+.pageChat .chatHeader {
+    width: 100%;
+    margin: 20px 0 0;
+}
+.pageChat .chatHeader h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+}
+.pageChat .chatPanelList {
+    margin: 20px 0;
+    padding: 20px 0;
+    width: 25%;
+}
+.pageChat .chatListHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px 10px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--hover);
+}
+.pageChat .chatLeftHeader {
+    padding: 0 20px 10px;
+    margin: 20px 0 0;
+}
+.pageChat .chatLeftHeader h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+}
+.pageChat .chatListHeader h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+}
+.pageChat .chatListHeader span {
+    font-size: 12px;
+    color: #6b7280;
+}
+.pageChat .chatListBody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 15px;
+    max-height: calc(100svh - 260px);
+    overflow-y: auto;
+}
+.pageChat .chatConvItem {
+    border-radius: 14px;
+    padding: 10px 12px;
+    cursor: pointer;
+    border: 1px solid #e5e7eb;
+    background: var(--white);
+    transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.pageChat .chatConvItem.active {
+    background: var(--hover);
+    border-color: #cbd5f5;
+    box-shadow: 0 4px 10px rgba(129,140,248,0.15);
+}
+.pageChat .chatConvRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.pageChat .chatConvAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #e5e7eb;
+    background: #f3f4f6;
+    flex-shrink: 0;
+}
+.pageChat .chatConvText {
+    flex: 1;
+    min-width: 0;
+}
+.pageChat .chatConvTitle {
+    font-weight: 600;
+    font-size: 13px;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pageChat .chatConvLastMsg {
+    font-size: 12px;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pageChat .chatConvTime {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+.pageChat .chatContent {
+    width: 75%;
+}
+.pageChat .chatPanel {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 0px 1px #0000004f;
+    padding: 12px;
+    min-height: 70vh;
+}
+.pageChat .chatRightHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--blue);
+    color: #fff;
+    margin: 0 0 12px;
+}
+.pageChat .chatRightAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffffcc;
+    background: #ffffff;
+}
+.pageChat .chatRightMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.pageChat .chatRightTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pageChat .chatRightSub {
+    font-size: 12px;
+    color: #e6ecff;
+}
+.pageChat .chatPlaceholder {
+    height: 100%;
+    border-radius: 14px;
+    border: 2px dashed #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    padding: 24px;
+    text-align: center;
+    flex-direction: column;
+}
+.pageChat .chatPlaceholderIcon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+.pageChat .chatPlaceholderTitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.pageChat .chatPlaceholderText {
+    font-size: 13px;
+}
+.chat-loading {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--hover);
+    color: #6b7280;
+    font-size: 14px;
+}
+
+@media (max-width: 992px) {
+    .pageChat section {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 90%;
+        align-items: center;
+    }
+    .pageChat .chatPanelList,
+    .pageChat .chatContent {
+        width: 100%;
+    }
+    .pageChat .chatPanel {
+        min-height: 60vh;
+    }
+}
 .FriendRequests {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1475,6 +1675,50 @@ header button i.fa-chevron-down {
     .pageFriends .Content {
         width: calc(100% - 40px);
         padding: 0 20px;
+    }
+    .pageChat section {
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+    .pageChat .chatPanelList,
+    .pageChat .chatContent {
+        width: 100%;
+    }
+    .pageChat .chatHeader {
+        margin: 10px 0 0;
+        padding: 0 20px;
+    }
+    .pageChat .chatListBody {
+        max-height: none;
+    }
+    .pageChat .chatPanelList {
+        width: 100%;
+        margin: 10px 0;
+        padding: 16px 0;
+        border-radius: 0;
+    }
+    .pageChat .chatContent {
+        width: 100%;
+        margin: 0;
+    }
+    .pageChat .chatPanel {
+        min-height: 60vh;
+        border-radius: 0;
+    }
+    .pageChat .chatRightHeader {
+        border-radius: 0;
+    }
+    .pageChat .chatListHeader {
+        padding: 0 16px 10px;
+    }
+    .pageChat .chatListBody {
+        padding: 0 12px;
+    }
+    .pageChat .chatConvItem {
+        padding: 10px;
+    }
+    .pageChat .chatConvTitle {
+        font-size: 13px;
     }
     .FriendRequests {
         grid-template-columns: repeat(2, 1fr);

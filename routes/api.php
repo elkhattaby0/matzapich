@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\FriendshipController;
+use App\Http\Controllers\Api\ConversationController;
+use App\Http\Controllers\Api\MessageController;
 use App\Models\User;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -19,28 +21,20 @@ Route::post('/email/resend-verification', function (Request $request) {
     $user = User::where('email', $request->input('email'))->first();
 
     if (! $user) {
-        return response()->json([
-            'message' => 'User not found.',
-        ], 404);
+        return response()->json(['message' => 'User not found.'], 404);
     }
 
     if ($user->hasVerifiedEmail()) {
-        return response()->json([
-            'message' => 'Email is already verified.',
-        ], 400);
+        return response()->json(['message' => 'Email is already verified.'], 400);
     }
 
     $user->sendEmailVerificationNotification();
 
-    return response()->json([
-        'message' => 'Verification email has been resent.',
-    ]);
+    return response()->json(['message' => 'Verification email has been resent.']);
 })->middleware('throttle:6,1');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return response()->json($request->user());
-    });
+    Route::get('/user', fn (Request $request) => response()->json($request->user()));
 
     Route::put('/user', [UserController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -57,7 +51,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/friendships/{friendship}/accept', [FriendshipController::class, 'accept']);
     Route::post('/friendships/{friendship}/reject', [FriendshipController::class, 'reject']);
     Route::delete('/friendships/{friendship}', [FriendshipController::class, 'destroy']);
-Route::get('/friend-requests', [FriendshipController::class, 'requests']);
-Route::get('/friend-suggestions', [FriendshipController::class, 'suggestions']);
-Route::get('/friend-birthdays', [FriendshipController::class, 'birthdays']);
+    Route::get('/friend-requests', [FriendshipController::class, 'requests']);
+    Route::get('/friend-suggestions', [FriendshipController::class, 'suggestions']);
+    Route::get('/friend-birthdays', [FriendshipController::class, 'birthdays']);
+
+    Route::post('/conversations/start', [ConversationController::class, 'start']);
+    Route::get('/user/conversations', [ConversationController::class, 'userConversations']);
+
+    Route::get('/conversations/{conversation}/messages', [MessageController::class, 'index']);
+    Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])
+        ->name('messages.store');
 });
