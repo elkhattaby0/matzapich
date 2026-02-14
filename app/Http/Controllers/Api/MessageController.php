@@ -7,6 +7,7 @@ use App\Models\Conversation;
 use App\Models\Message;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
@@ -58,8 +59,18 @@ class MessageController extends Controller
         $message->load('sender:id,firstName,lastName,avatar');
         $message->append('content');
 
-        // Realtime broadcast to other participants
-        broadcast(new MessageSent($message))->toOthers();
+        // Realtime broadcast to other participants. Do not fail message send
+        // if websocket infrastructure is unavailable.
+        try {
+            broadcast(new MessageSent($message))->toOthers();
+        } catch (\Throwable $e) {
+            Log::warning('Message broadcast failed', [
+                'conversation_id' => $conversation->id,
+                'message_id' => $message->id,
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         return response()->json([
             'message' => $message,
