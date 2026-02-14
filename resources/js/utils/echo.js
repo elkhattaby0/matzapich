@@ -39,8 +39,12 @@ const echo = usePusher
         envHost && !envHost.includes('${') && envHost !== 'localhost'
           ? envHost
           : runtimeHost;
-      const port = Number(import.meta.env.VITE_REVERB_PORT) || 8080;
       const scheme = import.meta.env.VITE_REVERB_SCHEME ?? 'http';
+      const envPort = Number(import.meta.env.VITE_REVERB_PORT);
+      const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+      const port = Number.isFinite(envPort) && envPort > 0
+        ? (scheme === 'https' && !isLocalHost && envPort === 8080 ? 443 : envPort)
+        : (scheme === 'https' ? 443 : 8080);
 
       return new Echo({
         broadcaster: 'reverb',

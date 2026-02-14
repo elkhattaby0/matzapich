@@ -5,6 +5,12 @@ import Chat from '../../components/common/Chat';
 import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 
+const toArray = (value) => {
+  if (Array.isArray(value)) return value;
+  if (Array.isArray(value?.data)) return value.data;
+  return [];
+};
+
 const ChatPage = () => {
   const { user, isAuthenticated } = useAuth();
   const { conversationId } = useParams();
@@ -31,7 +37,7 @@ const ChatPage = () => {
       });
 
       const data = res.data;
-      const list = data.conversations || [];
+      const list = toArray(data?.conversations ?? data?.data ?? data);
 
       setConversations(list);
 

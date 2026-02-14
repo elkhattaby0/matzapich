@@ -4,6 +4,12 @@ import axios from 'axios';
 import { useAuth } from '../../hooks/useAuth';
 import echo from '../../utils/echo';
 
+const toArray = (value) => {
+  if (Array.isArray(value)) return value;
+  if (Array.isArray(value?.data)) return value.data;
+  return [];
+};
+
 const chatStyles = {
   container: {
     height: '400px',
@@ -114,7 +120,7 @@ const Chat = ({ conversationId, token }) => {
         },
       })
       .then((res) => {
-        const msgs = res.data?.data || [];
+        const msgs = toArray(res.data?.data ?? res.data);
         setMessages(msgs);
       })
       .catch((err) => {
@@ -128,7 +134,7 @@ const Chat = ({ conversationId, token }) => {
       .private(channelName)
       .listen('.MessageSent', (e) => {
         if (e.message) {
-          setMessages((prev) => [...prev, e.message]);
+          setMessages((prev) => [...toArray(prev), e.message]);
         }
       });
 
@@ -160,7 +166,7 @@ const Chat = ({ conversationId, token }) => {
 
       if (response.data?.message) {
         // Show my message immediately; others get via broadcast
-        setMessages((prev) => [...prev, response.data.message]);
+        setMessages((prev) => [...toArray(prev), response.data.message]);
       }
       setNewMessage('');
     } catch (error) {
@@ -181,7 +187,7 @@ const Chat = ({ conversationId, token }) => {
     <div style={chatStyles.container}>
       {/* Messages */}
       <div style={chatStyles.messagesWrapper}>
-        {messages.map((msg) => {
+        {toArray(messages).map((msg) => {
           const isMe = currentUserId && msg.sender_id === currentUserId;
 
           const bubbleStyle = {
