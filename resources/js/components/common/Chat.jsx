@@ -1,5 +1,6 @@
 ﻿// resources/js/components/common/Chat.jsx
 import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import { useAuth } from '../../hooks/useAuth';
 import echo from '../../utils/echo';
 
@@ -105,19 +106,19 @@ const Chat = ({ conversationId, token }) => {
     if (!conversationId || !token) return;
 
     // Initial load
-    fetch(`/api/conversations/${conversationId}/messages`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const msgs = data.data || [];
+    axios
+      .get(`/api/conversations/${conversationId}/messages`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      })
+      .then((res) => {
+        const msgs = res.data?.data || [];
         setMessages(msgs);
       })
       .catch((err) => {
-        console.error('Load messages failed:', err);
+        console.error('Load messages failed:', err.response?.data || err);
       });
 
     // Realtime subscription
@@ -146,32 +147,24 @@ const Chat = ({ conversationId, token }) => {
     if (!newMessage.trim() || !conversationId || !token) return;
 
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `/api/conversations/${conversationId}/messages`,
+        { content: newMessage },
         {
-          method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
             Accept: 'application/json',
           },
-          body: JSON.stringify({ content: newMessage }),
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.message) {
-          // Show my message immediately; others get via broadcast
-          setMessages((prev) => [...prev, data.message]);
-        }
-        setNewMessage('');
-      } else {
-        const err = await response.text();
-        console.error('Send failed response:', err);
+      if (response.data?.message) {
+        // Show my message immediately; others get via broadcast
+        setMessages((prev) => [...prev, response.data.message]);
       }
+      setNewMessage('');
     } catch (error) {
-      console.error('Send failed:', error);
+      console.error('Send failed:', error.response?.data || error);
     }
   };
 
