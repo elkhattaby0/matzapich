@@ -39,12 +39,13 @@ const echo = usePusher
         envHost && !envHost.includes('${') && envHost !== 'localhost'
           ? envHost
           : runtimeHost;
-      const scheme = import.meta.env.VITE_REVERB_SCHEME ?? 'http';
+      const rawScheme = (import.meta.env.VITE_REVERB_SCHEME ?? 'http').toLowerCase();
+      const isTls = rawScheme === 'https' || rawScheme === 'wss';
       const envPort = Number(import.meta.env.VITE_REVERB_PORT);
       const isLocalHost = host === 'localhost' || host === '127.0.0.1';
       const port = Number.isFinite(envPort) && envPort > 0
-        ? (scheme === 'https' && !isLocalHost && envPort === 8080 ? 443 : envPort)
-        : (scheme === 'https' ? 443 : 8080);
+        ? (isTls && !isLocalHost && envPort === 8080 ? 443 : envPort)
+        : (isTls ? 443 : 8080);
 
       return new Echo({
         broadcaster: 'reverb',
@@ -52,7 +53,7 @@ const echo = usePusher
         wsHost: host,
         wsPort: port,
         wssPort: port,
-        forceTLS: scheme === 'https',
+        forceTLS: isTls,
         enabledTransports: ['ws', 'wss'],
         disableStats: true,
         ...authConfig,
